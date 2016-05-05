@@ -6,6 +6,7 @@ import com.itis.inf.java.department.jdbc.ParamsMapper;
 import com.itis.inf.java.department.jdbc.SqlQueryExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,6 +17,7 @@ import static java.util.Arrays.asList;
 /**
  * Created by rumia on 04/05/16.
  */
+@Component
 public class UserDaoImpl implements UserDao {
     @Autowired
     DaoArgumentsVerifier verifier;
@@ -25,12 +27,21 @@ public class UserDaoImpl implements UserDao {
     SqlQueryExecutor executor;
 
     //language=SQL
-    public static final String SQL_GET_USER_BY_ID = "SELECT * FROM users WHERE (id = :ID)";
+    private static final String SQL_GET_USER_BY_ID = "SELECT * FROM users WHERE (id = :ID)";
 
     //language=SQL
-    public static final String SQL_SET_USER_INTO_USERS = "INSERT INTO users values(:ID, :name, :surname, :companyID)";
+    private static final String SQL_GET_USER_BY_MAIL = "SELECT * FROM users WHERE (mail = :mail)";
 
-    static final RowMapper<User> USER_ROW_MAPPER = new RowMapper<User>() {
+    //language=SQL
+    private static final String SQL_SET_USER_INTO_USERS = "INSERT INTO users values(:ID, :name, :surname, :company)";
+
+    //language=SQL
+    private static final String SQL_GET_COMPANY_BY_NAME = "SELECT * FROM companies WHERE (name = :name)";
+
+    //language=SQL
+    private static final String SQL_SET_COMPANY_INTO_COMPANIES = "INSERT INTO companies VALUES (:ID, :name, :address, :admin, :worker)";
+
+    private static final RowMapper<User> USER_ROW_MAPPER = new RowMapper<User>() {
         @Override
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
             try {
@@ -50,11 +61,19 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public User getUser(String mail) {
+        verifier.verifyUser(mail);
+        Map<String, Object> paramMap = mapper.asMap(asList("mail"), asList(mail));
+        return executor.queryForObject(SQL_GET_USER_BY_MAIL, paramMap, USER_ROW_MAPPER);
+    }
+
+    @Override
     public boolean addUser(User user) {
         verifier.verifyUser(user.getId());
-        Map<String, Object> paramMap = mapper.asMap(asList("userid", "name", "surname", "patronymic", "seriesofthepassport", "numberofthepassport", "phonenumber", "email"),
-                asList(user.getId(),user.getName(), user.getSurname(), user.getCompanyID()));
+        Map<String, Object> paramMap = mapper.asMap(asList("id", "name", "surname", "company"),
+                asList(user.getId(),user.getName(), user.getSurname(), user.getCompany()));
         executor.updateQuery(SQL_SET_USER_INTO_USERS, paramMap);
+        // TODO: 04/05/16 if (...) return true; else return false;
         return true;
     }
 }

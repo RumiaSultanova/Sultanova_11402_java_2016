@@ -9,6 +9,10 @@ public class CompanyNotFoundException extends RuntimeException {
         temp = "No such company " + id;
     }
 
+    public CompanyNotFoundException(String name) {
+        temp = "No such company " + name;
+    }
+
     @Override
     public String getMessage() {
         return temp;

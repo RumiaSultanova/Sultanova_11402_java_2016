@@ -18,7 +18,8 @@ public class Doc {
     private String trainRepairType;
     private String trainRepairDate;
 
-    public Doc(int userID, String railwayName, String railwayAdmin, String trainStation, String trainDepot, String trainRailRoad, String trainModel, String trainContentType, String trainStartDate, String trainEndDate, String trainRepairType, String trainRepairDate) {
+    public Doc(int id, int userID, String railwayName, String railwayAdmin, String trainStation, String trainDepot, String trainRailRoad, String trainModel, String trainContentType, String trainStartDate, String trainEndDate, String trainRepairType, String trainRepairDate) {
+        this.id = id;
         this.userID = userID;
         this.railwayName = railwayName;
         this.railwayAdmin = railwayAdmin;

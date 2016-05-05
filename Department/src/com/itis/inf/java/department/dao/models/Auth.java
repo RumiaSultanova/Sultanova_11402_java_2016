@@ -10,7 +10,8 @@ public class Auth {
     private String mail;
     private String password;
 
-    public Auth(String mail, String password) {
+    public Auth(int id, String mail, String password) {
+        this.id = id;
         this.mail = mail;
         this.password = password;
     }

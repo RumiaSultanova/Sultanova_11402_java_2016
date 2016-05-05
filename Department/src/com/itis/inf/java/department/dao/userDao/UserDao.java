@@ -7,5 +7,6 @@ import com.itis.inf.java.department.dao.models.User;
  */
 public interface UserDao {
     User getUser(int id);
+    User getUser(String mail);
     boolean addUser(User user);
 }

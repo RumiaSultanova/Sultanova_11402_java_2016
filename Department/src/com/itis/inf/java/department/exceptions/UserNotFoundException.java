@@ -8,6 +8,9 @@ public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(int id) {
         temp = "No such user " + id;
     }
+    public UserNotFoundException(String mail) {
+        temp = "No such user " + mail;
+    }
 
     @Override
     public String getMessage() {

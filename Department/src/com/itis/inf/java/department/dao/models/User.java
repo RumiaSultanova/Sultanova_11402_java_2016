@@ -7,13 +7,13 @@ public class User {
     private int id;
     private String name;
     private String surname;
-    private int companyID;
+    private String company;
 
     public User(int id, String name, String surname, int companyID) {
         this.id = id;
         this.name = name;
         this.surname = surname;
-        this.companyID = companyID;
+        this.company = company;
     }
 
     public int getId() {
@@ -28,8 +28,8 @@ public class User {
         return surname;
     }
 
-    public int getCompanyID() {
-        return companyID;
+    public String getCompany() {
+        return company;
     }
 
     public void setId(int id) {
@@ -44,7 +44,7 @@ public class User {
         this.surname = surname;
     }
 
-    public void setCompanyID(int companyID) {
-        this.companyID = companyID;
+    public void setCompany(String company) {
+        this.company = company;
     }
 }

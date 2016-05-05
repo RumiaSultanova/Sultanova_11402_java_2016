@@ -15,7 +15,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan
+@ComponentScan("com.itis.inf.java.department")
 public class WebAppContex extends WebMvcConfigurerAdapter {
 
     @Bean
