@@ -1,8 +1,8 @@
 package com.itis.inf.java.department.dao;
 
 import com.itis.inf.java.department.exceptions.*;
-import com.itis.inf.java.department.jdbc.ParamsMapper;
-import com.itis.inf.java.department.jdbc.SqlQueryExecutor;
+import com.itis.inf.java.department.jdbc.utils.ParamsMapper;
+import com.itis.inf.java.department.jdbc.utils.SqlQueryExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,10 +27,16 @@ public class DaoArgumentsVerifyerImpl implements DaoArgumentsVerifier {
     private static final String SQL_COUNT_COMPANIES_BY_ID = "SELECT COUNT (*) FROM USERS WHERE (id = :ID)";
 
     //language=SQL
+    private static final String SQL_COUNT_COMPANIES_BY_NAME = "SELECT COUNT (*) FROM USERS WHERE (name = :name)";
+
+    //language=SQL
     private static final String SQL_COUNT_DOCS_BY_ID = "SELECT COUNT (*) FROM DOCS WHERE (id = :ID)";
 
     //language=SQL
     private static final String SQL_COUNT_AUTH_BY_ID = "SELECT COUNT (*)  FROM Auth WHERE (id = :ID)";
+
+    //language=SQL
+    private static final String SQL_COUNT_AUTH_BY_MAIL = "SELECT COUNT (*)  FROM Auth WHERE (mail = :mail)";
 
     @Autowired
     private SqlQueryExecutor sqlQueryExecutor;
@@ -57,9 +63,18 @@ public class DaoArgumentsVerifyerImpl implements DaoArgumentsVerifier {
     }
 
     @Override
+    public void verifyCompany(int ID) {
+        Map<String, Object> paramMap = paramsMapper.asMap(asList("ID"), asList(ID));
+        int count = sqlQueryExecutor.queryForInt(SQL_COUNT_COMPANIES_BY_ID, paramMap);
+        if (count != 1){
+            throw new CompanyNotFoundException(ID);
+        }
+    }
+
+    @Override
     public void verifyCompany(String name) {
         Map<String, Object> paramMap = paramsMapper.asMap(asList("name"), asList(name));
-        int count = sqlQueryExecutor.queryForInt(SQL_COUNT_COMPANIES_BY_ID, paramMap);
+        int count = sqlQueryExecutor.queryForInt(SQL_COUNT_COMPANIES_BY_NAME, paramMap);
         if (count != 1){
             throw new CompanyNotFoundException(name);
         }
@@ -77,6 +92,19 @@ public class DaoArgumentsVerifyerImpl implements DaoArgumentsVerifier {
     @Override
     public void verifyAuth(int ID) {
         Map<String, Object> paramMap = paramsMapper.asMap(asList("ID"), asList(ID));
+        int count = sqlQueryExecutor.queryForInt(SQL_COUNT_AUTH_BY_ID, paramMap);
+        if (count != 1){
+            throw new AuthNotFoundException(ID);
+        }
+    }
+
+    @Override
+    public void verifyAuth(String mail) {
+        Map<String, Object> paramMap = paramsMapper.asMap(asList("mail"), asList(mail));
+        int count = sqlQueryExecutor.queryForInt(SQL_COUNT_AUTH_BY_MAIL, paramMap);
+        if (count != 1){
+            throw new AuthNotFoundException(mail);
+        }
 
     }
 }

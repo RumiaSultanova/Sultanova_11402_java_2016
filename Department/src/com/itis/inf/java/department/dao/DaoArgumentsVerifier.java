@@ -6,7 +6,9 @@ package com.itis.inf.java.department.dao;
 public interface DaoArgumentsVerifier {
     void verifyUser(int ID);
     void verifyUser(String mail);
+    void verifyCompany(int ID);
     void verifyCompany(String name);
     void verifyDoc(int ID);
     void verifyAuth(int ID);
+    void verifyAuth(String mail);
 }

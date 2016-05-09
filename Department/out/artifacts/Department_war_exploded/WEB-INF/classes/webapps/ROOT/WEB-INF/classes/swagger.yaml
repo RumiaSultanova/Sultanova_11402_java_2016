@@ -1,0 +1,318 @@
+# Example YAML to get you started quickly.
+# Be aware that YAML has indentation based scoping.
+# Code completion support is available so start typing for available options.
+swagger: '2.0'
+
+# This is your document metadata
+info:
+  version: "1.0.0"
+  title: Reproduction Request
+  description: Making document of reproduction request for water biological resources
+
+host: api.reproductionrequest.com
+schemes:
+  - https
+basePath: /v1
+produces:
+  - application/json
+# Describe your paths here
+paths:
+  # This is a path endpoint. Change it.
+  /documents:
+    # This is a HTTP operation
+    get:
+      summary: List of documents
+      # Describe this verb here. Note: you can use markdown
+      description: |
+        Gets `Documents` objects.
+      # Expected responses for this operation:
+      tags:
+        - Documents
+      responses:
+        # Response code
+        200:
+          description: OK
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            $ref: "#/definitions/Documents"
+    post:
+      summary: New Document
+      description: Add new document
+      tags:
+        - Documents
+      parameters:
+       - in: body
+         name: body
+         description: Add new Document
+         required: false
+         schema:
+           $ref: "#/definitions/Document"
+      responses:
+        405:
+          description: Data is not valid
+  /document/{id}:
+    get:
+      summary: Get document
+      description: Get document with specified id
+      parameters:
+        - in: path
+          name: id
+          description: ID of the document
+          required: true
+          type: number
+          format: int
+      tags:
+        - Documents
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/Document"
+  /document/{id}/participant:
+    get:
+      summary: Get participant of document
+      description: Get participant of document with specified id
+      parameters:
+        - in: path
+          name: id
+          description: ID of document
+          required: true
+          type: number
+          format: int
+      tags:
+        - Participants
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/Participant"
+  /profile:
+    get:
+      summary: User Profile
+      description: Page of user profile
+      tags:
+        - Users
+      responses:
+       "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/User"
+       "405":
+          description: Data is not valid
+  /profile/update:
+    put:
+      tags:
+        - Users
+      summary: Update
+      description: Update user's information
+      parameters:
+        - in: body
+          name: data
+          description: Changed object
+          required: false
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        "404":
+          description: User not found
+        "400":
+          description: Invalid date
+  /logout:
+    get:
+      tags:
+        - Users
+      summary: End of session
+      description: "End of current session"
+      responses:
+        default:
+          description: OK
+  /login:
+    get:
+      tags:
+        - Users
+      summary: Log in
+      description: "Log in for user"
+      parameters:
+        - in: query
+          name: userName
+          description: Username/Login
+          required: false
+          type: string
+        - in: query
+          name: password
+          description: User password
+          required: false
+          type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Invalid login or password
+  /signin:
+    post:
+     tags:
+       - Users
+     summary: Sign in
+     description: "Sign in for user "
+     parameters:
+       - in: query
+         name: userName
+         description: Username/Login
+         required: false
+         type: string
+       - in: query
+         name: email
+         description: email
+         required: false
+         type: string
+       - in: query
+         name: city
+         description: User city
+         required: false
+         type: string
+       - in: query
+         name: age
+         description: User age
+         required: false
+         type: number
+         format: int
+       - in: query
+         name: gender
+         description: Gender
+         required: false
+         type: string
+       - in: query
+         name: snils
+         description: User snils
+         required: false
+         type: string
+       - in: query
+         name: password
+         description: User password
+         required: false
+         type: string
+     responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "405":
+          description: Invalid data
+
+definitions:
+  Document:
+    type: object
+    properties:
+      document_id:
+        type: number
+        format: int
+        description: PK
+      participant_id:
+        type: number
+        format: int
+        description: FK
+      yearOfWorks:
+        type: number
+        format: int
+        description: Begining year for works
+      dateOfEndOfTheWork:
+        description: Date of the end of the works
+        type: string
+        format: date
+      stateOfCreature:
+        description: What state of creature is used
+        type: string
+      typeOfCreature:
+        description: What type of creature is used
+        type: string
+      numberOfCreatures:
+        description: How many creatures are made
+        type: number
+        format: int
+      nameOfWorkLocation:
+        description: Where's works are doing
+        type: string
+      averegePieceOfWaterResources:
+        description: Averege piece of water resources
+        type: string
+      weightOfCreatures:
+        description: Weight of creatures
+        type: number
+        format: int
+      sourceOfResources:
+        description: Source of resources
+        type: string
+      dateOfFillingTheDocumnet:
+        description: Date of filling the document
+        type: string
+  Documents:
+      type: array
+      items:
+        $ref: "#/definitions/Document"
+  User:
+    type: object
+    properties:
+      user_id:
+        type: number
+        format: int
+        description: PK
+      name:
+        type: string
+        description: User name
+      surname:
+        type: string
+        description: User surname
+      patronymic:
+        type: string
+        description: User patronymic
+      email:
+        type: string
+        description: User email
+      phone:
+        type: string
+        description: User phone number
+      seriesOfThePassport:
+        type: number
+        format: int
+        description: Series of the user's passport
+      numberOfThePassport:
+        type: number
+        format: int
+        description: Number of the user's passport
+  Participant:
+    type: object
+    properties:
+      participant_id:
+        type: number
+        format: int
+        description: PK
+      isIE:
+        type: boolean
+        description: Is participant individual entrepreneur?
+      nameOfIE:
+        type: string
+        description: Name of individual entrepreneur
+      surnameOfIE:
+        type: string
+        description: Surame of individual entrepreneur
+      partonymicOfIE:
+        type: string
+        description: Patronymic of individual entrepreneur
+      nameOfEntity:
+        type: string
+        description: Name of legal entity
+      idOfTaxpayer:
+        type: number
+        format: int
+        description: Taxpayer's id of legal entity
+      location:
+        type: string
+        description: Location of legal entity
+      mainStateRegistrationNumber:
+        type: number
+        format: int
+        description: Main state regisration number of legal entity
+

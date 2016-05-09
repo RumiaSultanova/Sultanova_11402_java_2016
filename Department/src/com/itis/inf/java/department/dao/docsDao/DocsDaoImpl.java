@@ -2,8 +2,8 @@ package com.itis.inf.java.department.dao.docsDao;
 
 import com.itis.inf.java.department.dao.DaoArgumentsVerifier;
 import com.itis.inf.java.department.dao.models.Doc;
-import com.itis.inf.java.department.jdbc.ParamsMapper;
-import com.itis.inf.java.department.jdbc.SqlQueryExecutor;
+import com.itis.inf.java.department.jdbc.utils.ParamsMapper;
+import com.itis.inf.java.department.jdbc.utils.SqlQueryExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;

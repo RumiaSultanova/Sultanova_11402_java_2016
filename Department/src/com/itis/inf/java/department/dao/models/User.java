@@ -1,5 +1,7 @@
 package com.itis.inf.java.department.dao.models;
 
+import com.itis.inf.java.department.controllers.dto.UserDto;
+
 /**
  * Created by rumia on 03/05/16.
  */
@@ -9,14 +11,14 @@ public class User {
     private String surname;
     private String company;
 
-    public User(int id, String name, String surname, int companyID) {
+    public User(int id, String name, String surname, String company) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.company = company;
     }
 
-    public int getId() {
+    public int getID() {
         return id;
     }
 

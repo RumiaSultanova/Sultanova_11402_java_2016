@@ -2,8 +2,8 @@ package com.itis.inf.java.department.dao.authDao;
 
 import com.itis.inf.java.department.dao.DaoArgumentsVerifier;
 import com.itis.inf.java.department.dao.models.Auth;
-import com.itis.inf.java.department.jdbc.ParamsMapper;
-import com.itis.inf.java.department.jdbc.SqlQueryExecutor;
+import com.itis.inf.java.department.jdbc.utils.ParamsMapper;
+import com.itis.inf.java.department.jdbc.utils.SqlQueryExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -37,7 +37,10 @@ public class AuthDaoImpl implements AuthDao{
     public static final String SQL_GET_AUTH_BY_ID = "SELECT * FROM auth WHERE (id = :ID)";
 
     //language=SQL
-    public static final String SQL_SET_AUTH_INTO_USERS = "INSERT INTO auth values(:id, :mail, :password)";
+    public static final String SQL_GET_AUTH_BY_MAIL = "SELECT * FROM auth WHERE (mail = :mail)";
+
+    //language=SQL
+    public static final String SQL_SET_AUTH_INTO_AUTH = "INSERT INTO auth values(:id, :mail, :password)";
 
     @Override
     public Auth getAuth(int id) {
@@ -47,10 +50,17 @@ public class AuthDaoImpl implements AuthDao{
     }
 
     @Override
+    public Auth getAuth(String mail) {
+        verifier.verifyAuth(mail);
+        Map<String, Object> paramMap = mapper.asMap(asList("mail"), asList(mail));
+        return executor.queryForObject(SQL_GET_AUTH_BY_MAIL, paramMap, AUTH_ROW_MAPPER);
+    }
+
+    @Override
     public boolean addAuth(Auth auth) {
         verifier.verifyAuth(auth.getId());
         Map<String,Object> paramMap = mapper.asMap(asList("id", "mail", "password"), asList(auth.getId(), auth.getMail(), auth.getPassword()));
-        executor.updateQuery(SQL_SET_AUTH_INTO_USERS, paramMap);
+        executor.updateQuery(SQL_SET_AUTH_INTO_AUTH, paramMap);
         // TODO: 04/05/16 if (...) return true; else return false;
         return true;
     }

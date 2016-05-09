@@ -7,5 +7,6 @@ import com.itis.inf.java.department.dao.models.Auth;
  */
 public interface AuthDao {
     Auth getAuth(int id);
+    Auth getAuth(String mail);
     boolean addAuth(Auth auth);
 }

@@ -2,8 +2,8 @@ package com.itis.inf.java.department.dao.userDao;
 
 import com.itis.inf.java.department.dao.DaoArgumentsVerifier;
 import com.itis.inf.java.department.dao.models.User;
-import com.itis.inf.java.department.jdbc.ParamsMapper;
-import com.itis.inf.java.department.jdbc.SqlQueryExecutor;
+import com.itis.inf.java.department.jdbc.utils.ParamsMapper;
+import com.itis.inf.java.department.jdbc.utils.SqlQueryExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import static java.util.Arrays.asList;
 
@@ -19,6 +20,9 @@ import static java.util.Arrays.asList;
  */
 @Component
 public class UserDaoImpl implements UserDao {
+
+    private static Logger logger = Logger.getLogger(UserDaoImpl.class.getName());
+
     @Autowired
     DaoArgumentsVerifier verifier;
     @Autowired
@@ -45,8 +49,8 @@ public class UserDaoImpl implements UserDao {
         @Override
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
             try {
-                return new User(resultSet.getInt("id"), resultSet.getString("name"),
-                        resultSet.getString("surname"), resultSet.getInt("companyID"));
+                return new User(resultSet.getInt("ID"), resultSet.getString("name"),
+                        resultSet.getString("surname"), resultSet.getString("company"));
             } catch (SQLException e) {
                 throw new IllegalArgumentException(e);
             }
@@ -54,14 +58,16 @@ public class UserDaoImpl implements UserDao {
     };
 
     @Override
-    public User getUser(int id) {
-        verifier.verifyUser(id);
-        Map<String, Object> paramMap = mapper.asMap(asList("id"), asList(id));
+    public User getUser(int ID) {
+        logger.info("try to get user with " + ID + " ID");
+        verifier.verifyUser(ID);
+        Map<String, Object> paramMap = mapper.asMap(asList("ID"), asList(ID));
         return executor.queryForObject(SQL_GET_USER_BY_ID, paramMap, USER_ROW_MAPPER);
     }
 
     @Override
     public User getUser(String mail) {
+        logger.info("try to get user with " + mail + " mail");
         verifier.verifyUser(mail);
         Map<String, Object> paramMap = mapper.asMap(asList("mail"), asList(mail));
         return executor.queryForObject(SQL_GET_USER_BY_MAIL, paramMap, USER_ROW_MAPPER);
@@ -69,9 +75,9 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean addUser(User user) {
-        verifier.verifyUser(user.getId());
-        Map<String, Object> paramMap = mapper.asMap(asList("id", "name", "surname", "company"),
-                asList(user.getId(),user.getName(), user.getSurname(), user.getCompany()));
+        verifier.verifyUser(user.getID());
+        Map<String, Object> paramMap = mapper.asMap(asList("ID", "name", "surname", "company"),
+                asList(user.getID(),user.getName(), user.getSurname(), user.getCompany()));
         executor.updateQuery(SQL_SET_USER_INTO_USERS, paramMap);
         // TODO: 04/05/16 if (...) return true; else return false;
         return true;

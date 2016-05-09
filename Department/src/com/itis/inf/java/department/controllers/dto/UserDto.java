@@ -12,7 +12,7 @@ public class UserDto {
     private String company;
 
     public UserDto(User user) {
-        this.id = user.getId();
+        this.id = user.getID();
         this.name = user.getName();
         this.surname = user.getSurname();
         this.company = user.getCompany();
